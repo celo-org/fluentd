@@ -13,8 +13,8 @@ RUN apt-get update && apt-get install -y \
 RUN useradd -m -u 1000 -s /bin/bash fluentd
 
 # Create dirs
-RUN mkdir -p /fluentd/etc /fluentd/downloads /var/log/fluentd
-RUN chown -R fluentd:fluentd /fluentd /var/log/fluentd
+RUN mkdir -p /fluentd/etc /fluentd/downloads /var/log/fluentd \
+ && chown -R fluentd:fluentd /fluentd /var/log/fluentd
 
 # Copy configs and scripts
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
@@ -26,6 +26,10 @@ COPY fluentd-cron /etc/cron.d/fluentd-cron
 RUN chmod +x /fluentd/etc/downloader.py \
  && chmod 0644 /etc/cron.d/fluentd-cron \
  && crontab /etc/cron.d/fluentd-cron
+
+# Optional: install Python packages if needed
+# COPY requirements.txt /fluentd/etc/
+# RUN pip3 install --no-cache-dir -r /fluentd/etc/requirements.txt
 
 # Expose Fluentd port
 EXPOSE 24224
