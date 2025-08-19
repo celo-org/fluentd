@@ -14,7 +14,7 @@ RUN apt-get update && apt-get install -y \
  && rm -rf /var/lib/apt/lists/*
 
 # Create all necessary directories as root
-RUN mkdir -p /var/log/supervisor /var/log/fluentd /fluentd/etc /fluentd/log /fluentd/cron
+RUN mkdir -p /var/run/supervisor /var/log/supervisor /var/log/fluentd /fluentd/etc /fluentd/log /fluentd/cron
 
 # Create a Python virtual environment as root
 RUN python3 -m venv /opt/venv
