@@ -30,6 +30,9 @@ RUN chmod +x /fluentd/etc/downloader.py \
 # Expose Fluentd port
 EXPOSE 24224
 
+# Run as fluentd user
+USER fluentd
+
 # Start supervisor (manages fluentd + cron)
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf", "-n"]
 
