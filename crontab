@@ -1,2 +1,1 @@
-* * * * * /fluentd/etc/downloader.py >> /var/log/cron.log 2>&1
-
+* * * * * /usr/bin/python3 /fluentd/etc/downloader.py  >> /var/log/cron.log 2>&1
