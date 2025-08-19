@@ -19,6 +19,8 @@ RUN useradd -m -u 1000 -s /bin/bash fluentd
 RUN mkdir -p /fluentd/etc /fluentd/log /var/log/fluentd \
  && chown -R fluentd:fluentd /fluentd /var/log/fluentd
 
+
+
 # Copy configs and scripts
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 COPY fluent.conf /fluentd/etc/fluent.conf
@@ -31,8 +33,6 @@ RUN chmod +x /fluentd/etc/downloader.py \
 
 # Expose Fluentd port
 EXPOSE 24224
-
-
 
 # Run everything as the fluentd user
 USER fluentd
