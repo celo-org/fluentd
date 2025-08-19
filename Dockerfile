@@ -14,7 +14,7 @@ RUN apt-get update && apt-get install -y \
  && rm -rf /var/lib/apt/lists/*
 
 # Create all necessary directories as root
-RUN mkdir -p /var/log/fluentd /fluentd/etc /fluentd/log
+RUN mkdir -p /var/log/supervisor /var/log/fluentd /fluentd/etc /fluentd/log
 
 # Create a Python virtual environment as root
 RUN python3 -m venv /opt/venv
@@ -31,10 +31,13 @@ COPY fluentd-cron /etc/cron.d/fluentd-cron
 COPY /path/to/your/sa-key.json /fluentd/etc/sa-key.json
 
 # Set correct permissions and ownership for all files
+# The chown command gives ownership of the application directories to the fluent user
 RUN chmod +x /fluentd/etc/downloader.py \
  && chmod 0644 /etc/cron.d/fluentd-cron \
- && chown -R 1000:1000 /fluentd /var/log/fluentd
+ && chown -R 1000:1000 /fluentd /var/log/fluentd /var/log/supervisor
 
+# Set the GCP credentials environment variable
+ENV GOOGLE_APPLICATION_CREDENTIALS="/fluentd/etc/sa-key.json"
 
 # Switch to the fluent user for runtime, as all setup is complete
 USER fluent
