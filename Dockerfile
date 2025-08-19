@@ -11,6 +11,13 @@ RUN apt-get update && apt-get install -y \
  && pip3 install --no-cache-dir google-cloud-storage \
  && rm -rf /var/lib/apt/lists/*
 
+# Create a Python virtual environment and activate it
+RUN python3 -m venv /opt/venv
+ENV PATH="/opt/venv/bin:$PATH"
+
+# Install Python packages into the virtual environment
+RUN pip3 install --no-cache-dir google-cloud-storage
+
 # Switch back to the fluent user for subsequent commands and runtime
 USER fluent
 
