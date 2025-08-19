@@ -10,7 +10,7 @@ RUN apt-get update && apt-get install -y \
     python3-venv \
     cron \
     supervisor \
- && gem install fluent-plugin-gcloud-pubsub --no-document \
+ && gem install fluent-plugin-gcloud-pubsub-custom \
  && rm -rf /var/lib/apt/lists/*
 
 # Create all necessary directories as root
@@ -32,7 +32,7 @@ COPY fluentd-cron /etc/cron.d/fluentd-cron
 # Set correct permissions and ownership for all files and directories
 RUN chmod +x /fluentd/etc/downloader.py \
  && chmod 0644 /etc/cron.d/fluentd-cron \
- && chown -R 1000:1000 /fluentd /var/log/fluentd /var/log/supervisor
+ && chown -R fluent:fluent /fluentd /var/log/fluentd /var/log/supervisor
 
 # Switch to the fluent user for runtime, as all setup is complete
 USER fluent
@@ -41,4 +41,4 @@ USER fluent
 EXPOSE 24224
 
 # Set the entry point and the command.
-CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf", "-n"]
+CMD ["/bin/bash", "-c", "mkdir -p /fluentd/log/github-audit/pub-sub/message_queue && /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf -n"]
