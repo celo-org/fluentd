@@ -34,7 +34,7 @@ COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 RUN chmod +x /fluentd/etc/downloader.py \
  && chmod 0644 /etc/cron.d/fluentd-cron \
  && chmod +x /usr/local/bin/docker-entrypoint.sh \
- && chown -R 1000:1000 /fluentd /var/log/fluentd /var/log/supervisor /var/run/supervisor
+ && chown -R 1000:1000 /fluentd /var/log/fluentd /var/log/supervisor
 
 # Switch to the fluent user for runtime, as all setup is complete
 USER fluent
@@ -43,6 +43,5 @@ USER fluent
 EXPOSE 24224
 
 # Set the entry point and the command.
-# The entry point will run the permissions script.
 ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf", "-n"]
