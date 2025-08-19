@@ -28,11 +28,13 @@ COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 COPY fluent.conf /fluentd/etc/fluent.conf
 COPY downloader.py /fluentd/etc/downloader.py
 COPY fluentd-cron /etc/cron.d/fluentd-cron
+COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 
 # Set correct permissions and ownership for all files and directories
 RUN chmod +x /fluentd/etc/downloader.py \
  && chmod 0644 /etc/cron.d/fluentd-cron \
- && chown -R 1000:1000 /fluentd /var/log/fluentd /var/log/supervisor
+ && chmod +x /usr/local/bin/docker-entrypoint.sh \
+ && chown -R 1000:1000 /fluentd /var/log/fluentd /var/log/supervisor /var/run/supervisor
 
 # Switch to the fluent user for runtime, as all setup is complete
 USER fluent
@@ -40,5 +42,7 @@ USER fluent
 # Expose Fluentd port
 EXPOSE 24224
 
-# The base image's entrypoint is fluentd, but you are using supervisor.
+# Set the entry point and the command.
+# The entry point will run the permissions script.
+ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf", "-n"]
