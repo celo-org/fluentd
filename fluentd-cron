@@ -1,7 +1,3 @@
-# Run downloader.py every minute as the fluentd user
+# Run downloader.py every minute
 * * * * * fluentd /usr/bin/python3 /fluentd/etc/downloader.py >> /fluentd/log/downloader.log 2>&1
-
-# Store the cron PID in a writable location
-PIDFILE=/fluentd/run/fluentd-cron.pid
-echo $$ > $PIDFILE
 
