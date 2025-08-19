@@ -7,7 +7,7 @@ from google.cloud import storage
 from google.api_core.exceptions import GoogleAPIError
 
 LOG_DIR = "/fluentd/log/github-audit/pub-sub/message_queue/"
-STATE_FILE = "/fluentd/log/github-audit/state/state.json"
+STATE_FILE = "/fluentd/log/github-audit/pub-sub/state/state.json"
 DOWNLOAD_DIR = "/fluentd/log/github-audit/gcs/input_logs"
 MAX_WORKERS = 5  # Number of parallel downloads
 MAX_RETRIES = 5
