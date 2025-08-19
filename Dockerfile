@@ -2,9 +2,10 @@ FROM debian:bullseye
 
 # Install dependencies
 RUN apt-get update && apt-get install -y \
- && python3 python3-pip \
- && cron supervisor \
- && gem install fluentd --no-doc \
+    python3-pip \
+    cron \
+    supervisor \
+ && gem install fluentd --no-document \
  && gem install fluent-plugin-gcloud-pubsub --no-document \
  && pip3 install --no-cache-dir google-cloud-storage \
  && rm -rf /var/lib/apt/lists/*
