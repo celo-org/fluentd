@@ -1,2 +1,3 @@
 PATH=/opt/venv/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 * * * * * fluent /fluentd/etc/downloader.py >> /var/log/fluentd/downloader.log 2>&1
+

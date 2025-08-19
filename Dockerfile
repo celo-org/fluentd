@@ -25,7 +25,7 @@ RUN pip3 install --no-cache-dir google-cloud-storage
 
 # Copy all configurations and scripts as root
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
-COPY fluent.conf /fluentd/etc/fluent.conf
+COPY fluentd.conf /fluentd/etc/fluentd.conf
 COPY downloader.py /fluentd/etc/downloader.py
 COPY fluentd-cron /etc/cron.d/fluentd-cron
 COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
