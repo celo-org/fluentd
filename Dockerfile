@@ -35,8 +35,6 @@ RUN chmod +x /fluentd/etc/downloader.py \
  && chmod 0644 /etc/cron.d/fluentd-cron \
  && chown -R 1000:1000 /fluentd /var/log/fluentd
 
-# Set the GCP credentials environment variable
-ENV GOOGLE_APPLICATION_CREDENTIALS="/fluentd/etc/sa-key.json"
 
 # Switch to the fluent user for runtime, as all setup is complete
 USER fluent
