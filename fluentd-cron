@@ -1,0 +1,3 @@
+# Run downloader every 5 minutes
+* * * * * fluentd /fluentd/etc/downloader.py >> /fluentd/log/downloader.log 2>&1
+

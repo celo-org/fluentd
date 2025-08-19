@@ -22,7 +22,7 @@ COPY fluent.conf /fluentd/etc/fluent.conf
 COPY downloader.py /fluentd/etc/downloader.py
 COPY fluentd-cron /etc/cron.d/fluentd-cron
 
-# Fix perms
+# Fix permissions
 RUN chmod +x /fluentd/etc/downloader.py \
  && chmod 0644 /etc/cron.d/fluentd-cron \
  && crontab -u fluentd /etc/cron.d/fluentd-cron
@@ -30,7 +30,9 @@ RUN chmod +x /fluentd/etc/downloader.py \
 # Expose Fluentd port
 EXPOSE 24224
 
-# Run supervisord as fluentd
+# Run as fluentd user
 USER fluentd
+
+# Start supervisor
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf", "-n"]
 
