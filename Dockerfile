@@ -29,8 +29,7 @@ COPY fluent.conf /fluentd/etc/fluent.conf
 COPY downloader.py /fluentd/etc/downloader.py
 COPY fluentd-cron /etc/cron.d/fluentd-cron
 
-# Set correct permissions and ownership for all files
-# The chown command gives ownership of the application directories to the fluent user
+# Set correct permissions and ownership for all files and directories
 RUN chmod +x /fluentd/etc/downloader.py \
  && chmod 0644 /etc/cron.d/fluentd-cron \
  && chown -R 1000:1000 /fluentd /var/log/fluentd /var/log/supervisor
