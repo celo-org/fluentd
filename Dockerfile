@@ -13,26 +13,22 @@ RUN apt-get update && apt-get install -y \
 RUN useradd -m -u 1000 -s /bin/bash fluentd
 
 # Create dirs
-RUN mkdir -p /fluentd/etc /fluentd/downloads /var/log/fluentd \
- && chown -R fluentd:fluentd /fluentd /var/log/fluentd
+RUN mkdir -p /fluentd/etc /fluentd/downloads /fluentd/log \
+ && chown -R fluentd:fluentd /fluentd
 
 # Copy configs and scripts
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 COPY fluent.conf /fluentd/etc/fluent.conf
 COPY downloader.py /fluentd/etc/downloader.py
-COPY crontab /etc/cron.d/fluentd-cron
+COPY fluentd-cron /etc/cron.d/fluentd-cron
 
 # Fix perms
 RUN chmod +x /fluentd/etc/downloader.py \
  && chmod 0644 /etc/cron.d/fluentd-cron \
- && crontab /etc/cron.d/fluentd-cron \
- && chown -R fluentd:fluentd /etc/cron.d
+ && crontab /etc/cron.d/fluentd-cron
 
 # Expose Fluentd port
 EXPOSE 24224
-
-# Switch to fluentd user to avoid supervisor root warning
-USER fluentd
 
 # Start supervisor (manages fluentd + cron)
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf", "-n"]
