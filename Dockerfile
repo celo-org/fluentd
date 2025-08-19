@@ -1,6 +1,6 @@
 FROM debian:bullseye
 
-# Install dependencies: Ruby (for Fluentd), Python3 (for downloader), Cron, Supervisor
+# Install dependencies
 RUN apt-get update && apt-get install -y \
     ruby ruby-dev build-essential \
     python3 python3-pip \
@@ -13,8 +13,8 @@ RUN apt-get update && apt-get install -y \
 RUN useradd -m -u 1000 -s /bin/bash fluentd
 
 # Create dirs
-RUN mkdir -p /fluentd/etc /fluentd/downloads /fluentd/log \
- && chown -R fluentd:fluentd /fluentd
+RUN mkdir -p /fluentd/etc /fluentd/downloads /fluentd/log /var/log/supervisor \
+ && chown -R fluentd:fluentd /fluentd /var/log/supervisor
 
 # Copy configs and scripts
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
@@ -25,14 +25,12 @@ COPY fluentd-cron /etc/cron.d/fluentd-cron
 # Fix perms
 RUN chmod +x /fluentd/etc/downloader.py \
  && chmod 0644 /etc/cron.d/fluentd-cron \
- && crontab /etc/cron.d/fluentd-cron
+ && crontab -u fluentd /etc/cron.d/fluentd-cron
 
 # Expose Fluentd port
 EXPOSE 24224
 
-# Run as fluentd user
+# Run supervisord as fluentd
 USER fluentd
-
-# Start supervisor (manages fluentd + cron)
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf", "-n"]
 
