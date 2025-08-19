@@ -5,23 +5,24 @@ FROM fluent/fluentd:v1.19.0-debian
 USER root
 RUN apt-get update && apt-get install -y \
     python3-pip \
+    python3-venv \
     cron \
     supervisor \
  && gem install fluent-plugin-gcloud-pubsub --no-document \
- && pip3 install --no-cache-dir google-cloud-storage \
  && rm -rf /var/lib/apt/lists/*
 
-# Create a Python virtual environment and activate it
+# Create a Python virtual environment
 RUN python3 -m venv /opt/venv
-ENV PATH="/opt/venv/bin:$PATH"
 
-# Install Python packages into the virtual environment
+# Activate the virtual environment and install Python packages
+ENV PATH="/opt/venv/bin:$PATH"
 RUN pip3 install --no-cache-dir google-cloud-storage
 
 # Switch back to the fluent user for subsequent commands and runtime
 USER fluent
 
-# The official image already sets up the fluentd user and directories, but we will ensure our directories are correct.
+# The official image already sets up the fluentd user and directories
+# with correct permissions, but we will make sure our directories are correct.
 RUN mkdir -p /fluentd/etc /fluentd/log /var/log/fluentd
 
 # Copy your configurations
