@@ -2,7 +2,6 @@ FROM debian:bullseye
 
 # Install dependencies
 RUN apt-get update && apt-get install -y \
- && ruby ruby-dev build-essential \
  && python3 python3-pip \
  && cron supervisor \
  && gem install fluentd --no-doc \
