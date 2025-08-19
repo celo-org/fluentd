@@ -1,27 +1,23 @@
 #!/bin/bash
 
 # Define the volume name and image name
-IMAGE_NAME="fluentd"
-CONTAINER_NAME="fluentd-container"
-LOG_DIR_PATH="$(pwd)/log"
+VOLUME_NAME="fluentd_log_volume"
+IMAGE_NAME="fluentd-gcp:1.0.0"
 
-# Stop and remove any existing container
-docker stop $CONTAINER_NAME >/dev/null 2>&1 || true
-docker rm $CONTAINER_NAME >/dev/null 2>&1 || true
-
-# Change the ownership of the log directory to match the fluent user (UID 1000)
-# This must be done on the host before the container is run
-if [ ! -d "$LOG_DIR_PATH" ]; then
-    mkdir -p "$LOG_DIR_PATH"
-    sudo chown -R 1000:1000 "$LOG_DIR_PATH"
-else
-    sudo chown -R 1000:1000 "$LOG_DIR_PATH"
+# Check if the volume exists, and create it if it doesn't
+if [ ! "$(docker volume ls -q -f name=$VOLUME_NAME)" ]; then
+    echo "Creating Docker volume: $VOLUME_NAME"
+    docker volume create $VOLUME_NAME
 fi
 
-# Run the container
+# Stop and remove any old container
+docker stop fluentd-container >/dev/null 2>&1 || true
+docker rm fluentd-container >/dev/null 2>&1 || true
+
+# Run the container with the named volume
 echo "Running the container..."
 docker run \
-  --name $CONTAINER_NAME \
+  --name fluentd-container \
   -d \
-  -v "$LOG_DIR_PATH":/fluentd/log \
+  -v $VOLUME_NAME:/fluentd/log \
   $IMAGE_NAME
