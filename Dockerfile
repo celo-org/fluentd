@@ -3,3 +3,5 @@ USER root
 RUN apt-get update && apt-get install -y python3-pip \
  && gem install fluent-plugin-gcloud-pubsub-custom \
  && pip install google-cloud-storage 
+RUN adduser -D -u 1000 fluentd
+USER fluentd
