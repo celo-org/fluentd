@@ -6,9 +6,9 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from google.cloud import storage
 from google.api_core.exceptions import GoogleAPIError
 
-LOG_DIR = "/fluentd/message_queue/"
-STATE_FILE = "/fluentd/state/state.json"
-DOWNLOAD_DIR = "/fluentd/input_logs"
+LOG_DIR = "/fluentd/log/message_queue/"
+STATE_FILE = "/fluentd/log/state/state.json"
+DOWNLOAD_DIR = "/fluentd/log/input_logs"
 MAX_WORKERS = 5  # Number of parallel downloads
 MAX_RETRIES = 5
 BASE_BACKOFF = 1  # seconds
