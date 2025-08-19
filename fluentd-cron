@@ -1,3 +1,2 @@
-# Run downloader.py every minute
-* * * * * fluentd /usr/bin/python3 /fluentd/etc/downloader.py >> /fluentd/log/downloader.log 2>&1
-
+PATH=/opt/venv/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+* * * * * root /fluentd/etc/downloader.py >> /var/log/fluentd/downloader.log 2>&1
