@@ -24,8 +24,8 @@ COPY fluentd-cron /etc/cron.d/fluentd-cron
 
 # Fix perms
 RUN chmod +x /fluentd/etc/downloader.py \
- && chmod 0644 /etc/cron.d/fluentd-cron \
- && crontab /etc/cron.d/fluentd-cron
+ && chmod 0644 /etc/cron.d/fluentd-cron
+
 
 # Expose Fluentd port
 EXPOSE 24224
