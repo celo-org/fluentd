@@ -20,19 +20,19 @@ RUN mkdir -p /fluentd/etc /fluentd/downloads /var/log/fluentd \
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 COPY fluent.conf /fluentd/etc/fluent.conf
 COPY downloader.py /fluentd/etc/downloader.py
-COPY fluentd-cron /etc/cron.d/fluentd-cron
+COPY crontab /etc/cron.d/fluentd-cron
 
 # Fix perms
 RUN chmod +x /fluentd/etc/downloader.py \
  && chmod 0644 /etc/cron.d/fluentd-cron \
- && crontab /etc/cron.d/fluentd-cron
-
-# Optional: install Python packages if needed
-# COPY requirements.txt /fluentd/etc/
-# RUN pip3 install --no-cache-dir -r /fluentd/etc/requirements.txt
+ && crontab /etc/cron.d/fluentd-cron \
+ && chown -R fluentd:fluentd /etc/cron.d
 
 # Expose Fluentd port
 EXPOSE 24224
+
+# Switch to fluentd user to avoid supervisor root warning
+USER fluentd
 
 # Start supervisor (manages fluentd + cron)
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf", "-n"]
