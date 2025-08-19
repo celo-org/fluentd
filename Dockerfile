@@ -16,7 +16,7 @@ RUN apt-get update && apt-get install -y \
 RUN useradd -m -u 1000 -s /bin/bash fluentd
 
 # Create directories with correct ownership
-RUN mkdir -p /fluentd/etc /fluentd/downloads /fluentd/log /var/log/fluentd \
+RUN mkdir -p /fluentd/etc /fluentd/log /var/log/fluentd \
  && chown -R fluentd:fluentd /fluentd /var/log/fluentd
 
 # Copy configs and scripts
