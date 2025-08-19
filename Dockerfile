@@ -14,7 +14,7 @@ RUN apt-get update && apt-get install -y \
  && rm -rf /var/lib/apt/lists/*
 
 # Create all necessary directories as root
-RUN mkdir -p /var/log/supervisor /var/log/fluentd /fluentd/etc /fluentd/log /fluentd/cron
+RUN mkdir -p /var/log/supervisor /var/log/fluentd /fluentd/etc /fluentd/log /fluentd/cron /var/run/supervisor
 
 # Create a Python virtual environment as root
 RUN python3 -m venv /opt/venv
@@ -34,7 +34,7 @@ COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 RUN chmod +x /fluentd/etc/downloader.py \
  && chmod 0644 /etc/cron.d/fluentd-cron \
  && chmod +x /usr/local/bin/docker-entrypoint.sh \
- && chown -R 1000:1000 /fluentd /var/log/fluentd /var/log/supervisor
+ && chown -R 1000:1000 /fluentd /var/log/fluentd /var/log/supervisor /var/run/supervisor
 
 # Switch to the fluent user for runtime, as all setup is complete
 USER fluent
