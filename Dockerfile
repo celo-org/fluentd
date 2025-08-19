@@ -1,27 +1,23 @@
+# Use the official Fluentd Debian image
 FROM fluent/fluentd:v1.19.0-debian
 
-# Install dependencies
+# Switch to root to install system packages and gems
+USER root
 RUN apt-get update && apt-get install -y \
-    ruby-full \
     python3-pip \
     cron \
     supervisor \
- && gem install fluentd --no-document \
  && gem install fluent-plugin-gcloud-pubsub --no-document \
  && pip3 install --no-cache-dir google-cloud-storage \
  && rm -rf /var/lib/apt/lists/*
 
+# Switch back to the fluent user for subsequent commands and runtime
+USER fluent
 
-# Create fluentd user
-RUN useradd -m -u 1000 -s /bin/bash fluentd
+# The official image already sets up the fluentd user and directories, but we will ensure our directories are correct.
+RUN mkdir -p /fluentd/etc /fluentd/log /var/log/fluentd
 
-# Create directories with correct ownership
-RUN mkdir -p /fluentd/etc /fluentd/log /var/log/fluentd \
- && chown -R fluentd:fluentd /fluentd /var/log/fluentd
-
-
-
-# Copy configs and scripts
+# Copy your configurations
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 COPY fluent.conf /fluentd/etc/fluent.conf
 COPY downloader.py /fluentd/etc/downloader.py
@@ -34,8 +30,5 @@ RUN chmod +x /fluentd/etc/downloader.py \
 # Expose Fluentd port
 EXPOSE 24224
 
-# Run everything as the fluentd user
-USER fluentd
-# Start supervisor (manages fluentd + cron)
+# The base image's entrypoint is fluentd, but you are using supervisor.
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf", "-n"]
-
