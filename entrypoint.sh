@@ -1,8 +1,8 @@
 #!/bin/bash
 
-# Start cron
+# Start cron (as root)
 cron
 
-# Start Fluentd
-exec fluentd -c /fluentd/etc/fluent.conf -v
+# Run Fluentd as fluentd user
+exec su fluentd -s /bin/bash -c "fluentd -c /fluentd/etc/fluent.conf -v"
 
