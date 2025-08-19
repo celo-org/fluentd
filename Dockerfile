@@ -7,6 +7,8 @@ RUN apt-get update && apt-get install -y \
     cron supervisor \
  && gem install fluentd --no-doc \
  && gem install fluent-plugin-gcloud-pubsub --no-document \
+
+ && pip3 install --no-cache-dir google-cloud-storage \
  && rm -rf /var/lib/apt/lists/*
 
 # Create fluentd user
@@ -29,9 +31,10 @@ RUN chmod +x /fluentd/etc/downloader.py \
 # Expose Fluentd port
 EXPOSE 24224
 
+
+
 # Run everything as the fluentd user
 USER fluentd
-
 # Start supervisor (manages fluentd + cron)
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf", "-n"]
 
