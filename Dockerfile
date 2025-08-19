@@ -2,6 +2,7 @@ FROM debian:bullseye
 
 # Install dependencies
 RUN apt-get update && apt-get install -y \
+    ruby-full \
     python3-pip \
     cron \
     supervisor \
@@ -9,6 +10,7 @@ RUN apt-get update && apt-get install -y \
  && gem install fluent-plugin-gcloud-pubsub --no-document \
  && pip3 install --no-cache-dir google-cloud-storage \
  && rm -rf /var/lib/apt/lists/*
+
 
 # Create fluentd user
 RUN useradd -m -u 1000 -s /bin/bash fluentd
