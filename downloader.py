@@ -130,4 +130,11 @@ def poll_logs():
             logging.error(f"Error deleting file {path}: {e}")
 
 if __name__ == "__main__":
-    poll_logs()
+    while True:
+        try:
+            poll_logs()
+        except Exception as e:
+            logging.error(f"An unexpected error occurred during polling: {e}")
+        
+        logging.info("Polling complete. Sleeping for 60 seconds...")
+        time.sleep(60) # Sleeps for 60 seconds before the next run
