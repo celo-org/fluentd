@@ -137,4 +137,4 @@ if __name__ == "__main__":
             logging.error(f"An unexpected error occurred during polling: {e}")
         
         logging.info("Polling complete. Sleeping for 60 seconds...")
-        time.sleep(60) # Sleeps for 60 seconds before the next run
+        time.sleep(5) # Sleeps for 60 seconds before the next run
