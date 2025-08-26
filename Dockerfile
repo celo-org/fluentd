@@ -8,13 +8,12 @@ USER root
 RUN apt-get update && apt-get install -y \
     python3-pip \
     python3-venv \
-    cron \
     supervisor \
  && gem install fluent-plugin-gcloud-pubsub-custom \
  && rm -rf /var/lib/apt/lists/*
 
 # Create all necessary directories as root
-RUN mkdir -p /var/log/supervisor /var/log/fluentd /fluentd/etc /fluentd/log /fluentd/cron
+RUN mkdir -p /var/log/supervisor /var/log/fluentd /fluentd/etc /fluentd/log
 
 # Create a Python virtual environment as root
 RUN python3 -m venv /opt/venv
@@ -27,11 +26,9 @@ RUN pip3 install --no-cache-dir google-cloud-storage
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 COPY fluentd.conf /fluentd/etc/fluentd.conf
 COPY downloader.py /fluentd/etc/downloader.py
-COPY fluentd-cron /etc/cron.d/fluentd-cron
 
 # Set correct permissions and ownership for all files and directories
 RUN chmod +x /fluentd/etc/downloader.py \
- && chmod 0644 /etc/cron.d/fluentd-cron \
  && chown -R fluent:fluent /fluentd /var/log/fluentd /var/log/supervisor
 
 # Switch to the fluent user for runtime, as all setup is complete

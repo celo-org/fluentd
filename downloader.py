@@ -49,6 +49,7 @@ def download_gcs_object(bucket_name, object_name):
         try:
             blob.download_to_filename(local_path)
             logging.info(f"Downloaded {bucket_name}/{object_name} to {local_path}")
+           ////////////  
             return
         except GoogleAPIError as e:
             wait_time = BASE_BACKOFF * (2 ** (attempt - 1))
@@ -74,6 +75,7 @@ def process_line(line):
 def poll_logs():
     state = load_state()
     tasks = []
+    files_to_delete = []
 
     with ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
         for fname in sorted(os.listdir(LOG_DIR)):
@@ -82,6 +84,7 @@ def poll_logs():
 
             path = os.path.join(LOG_DIR, fname)
             last_offset = state.get(fname, 0)
+            file_has_new_data = False
 
             with open(path, "r") as f:
                 f.seek(last_offset)
@@ -89,6 +92,7 @@ def poll_logs():
                     line = f.readline()
                     if not line:
                         break
+                    file_has_new_data = True
                     try:
                         result = process_line(line)
                         if result:
@@ -97,16 +101,33 @@ def poll_logs():
                         logging.error(f"Error processing line in {fname}: {e}")
                     last_offset = f.tell()
 
-            state[fname] = last_offset
+            # Update the state with the new offset
+            if file_has_new_data:
+                state[fname] = last_offset
 
-        # Wait for all downloads to finish
-        for future in as_completed(tasks):
-            try:
-                future.result()
-            except Exception as e:
-                logging.error(f"Download task error: {e}")
+            # If the file has been fully processed (no new data was found), mark it for deletion
+            if not file_has_new_data and fname in state:
+                files_to_delete.append(path)
+                # Remove from state to prevent reprocessing in future runs
+                del state[fname]
 
+    # Wait for all downloads to finish
+    for future in as_completed(tasks):
+        try:
+            future.result()
+        except Exception as e:
+            logging.error(f"Download task error: {e}")
+
+    # Save the updated state
     save_state(state)
+
+    # Clean up processed files
+    for path in files_to_delete:
+        try:
+            os.remove(path)
+            logging.info(f"Successfully deleted processed log file: {path}")
+        except OSError as e:
+            logging.error(f"Error deleting file {path}: {e}")
 
 if __name__ == "__main__":
     poll_logs()
