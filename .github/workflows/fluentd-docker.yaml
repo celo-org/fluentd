@@ -39,7 +39,6 @@ jobs:
       service-account: fluentd-ingest-dev@logging-468916.iam.gserviceaccount.com
       artifact-registry:  us-west1-docker.pkg.dev/devopsre/dev-images/fluentd
       tags: testing
-      akeyless-api-gateway: https://api.gateway.akeyless.celo-networks-dev.org
       akeyless-github-access-id: p-kf9vjzruht6l #gitleaks:allow
       environment: development
       debug-enabled: ${{ inputs.debug != '' && inputs.debug || false }}
@@ -62,7 +61,6 @@ jobs:
       service-account: fluentd-ingest@logging-468916.iam.gserviceaccount.com
       artifact-registry:  us-west1-docker.pkg.dev/devopsre/fluentd/fluentd
       tags: latest
-      akeyless-api-gateway: https://api.gateway.akeyless.celo-networks-dev.org
       akeyless-github-access-id: p-kf9vjzruht6l #gitleaks:allow
       environment: production
       debug-enabled: ${{ inputs.debug != '' && inputs.debug || false }}
