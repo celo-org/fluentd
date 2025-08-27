@@ -10,13 +10,13 @@ on:
   push:
     paths:
       - '.github/workflows/fluentd-docker.yaml'
-      - '.'
+      - 'docker'
     branches:
       - main
   pull_request:
     paths:
       - '.github/workflows/fluentd-docker.yaml'
-      - '.'
+      - 'docker'
 
 permissions: read-all
 
