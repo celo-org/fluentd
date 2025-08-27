@@ -38,6 +38,11 @@ USER fluent
 # Expose Fluentd port
 EXPOSE 24224
 
-# Set the entry point and the command.
-# Now includes mkdir for /fluentd/etc
-CMD ["/bin/bash", "-c", "mkdir -p /fluentd/etc /fluentd/log/github-audit/pub-sub/message_queue && /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf -n"]
+# Set the entrypoint to the script
+ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
+
+# The command is now empty as the entrypoint script handles everything
+CMD []
+
+# Expose Fluentd port
+EXPOSE 24224
