@@ -1,3 +1,4 @@
+
 # Use the official Fluentd Debian image
 FROM fluent/fluentd:v1.19.0-debian
 
@@ -12,8 +13,8 @@ RUN apt-get update && apt-get install -y \
  && gem install fluent-plugin-gcloud-pubsub-custom \
  && rm -rf /var/lib/apt/lists/*
 
-# Create all necessary directories as root
-RUN mkdir -p /var/log/supervisor /var/log/fluentd /fluentd/etc /fluentd/log
+# Create all necessary directories on the container's native filesystem
+RUN mkdir -p /var/log/supervisor /var/log/fluentd
 
 # Create a Python virtual environment as root
 RUN python3 -m venv /opt/venv
@@ -29,7 +30,7 @@ COPY downloader.py /fluentd/etc/downloader.py
 
 # Set correct permissions and ownership for all files and directories
 RUN chmod +x /fluentd/etc/downloader.py \
- && chown -R fluent:fluent /fluentd /var/log/fluentd /var/log/supervisor 
+ && chown -R fluent:fluent /fluentd /var/log/fluentd /var/log/supervisor
 
 # Switch to the fluent user for runtime, as all setup is complete
 USER fluent
@@ -38,4 +39,5 @@ USER fluent
 EXPOSE 24224
 
 # Set the entry point and the command.
-CMD ["mkdir -p /fluentd/log/github-audit/pub-sub/message_queue && /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf -n"]
+# Now includes mkdir for /fluentd/etc
+CMD ["/bin/bash", "-c", "mkdir -p /fluentd/etc /fluentd/log/github-audit/pub-sub/message_queue && /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf -n"]
