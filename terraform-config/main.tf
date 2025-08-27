@@ -25,18 +25,12 @@ module "gce-container" {
   container = {
     image = var.image
 
-    env = [
-      {
-        name  = "TEST_VAR"
-        value = "Hello World!"
-      },
-    ]
 
     # Declare volumes to be mounted
     # This is similar to how Docker volumes are mounted
     volumeMounts = [
       {
-        mountPath = "/fluentd"
+        mountPath = "/fluentd/logs"
         name      = "fluentd-logs"
         readOnly  = false
       },

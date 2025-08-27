@@ -29,7 +29,7 @@ COPY fluentd.conf /fluentd/etc/fluentd.conf
 COPY downloader.py /fluentd/etc/downloader.py
 
 # Copy the script and then convert its line endings
-COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+COPY docker-entrypoint.sh /fluentd/
 
 
 # Set correct permissions and ownership for all files and directories
@@ -44,7 +44,7 @@ USER fluent
 EXPOSE 24224
 
 # Set the entrypoint to the script
-ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
+ENTRYPOINT ["/fluentd/docker-entrypoint.sh"]
 
 # The command is now empty as the entrypoint script handles everything
 CMD []
