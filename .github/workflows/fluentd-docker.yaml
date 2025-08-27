@@ -1,4 +1,4 @@
-name: Akeyless Custom Github Action
+name: Build fluentd container
 
 on:
   workflow_dispatch:
