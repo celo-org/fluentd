@@ -64,7 +64,11 @@ variable "gcp_provider_region" {
 #  type        = any
 #  description = "list of email group rules"
 #}
-variable "fluentd-image" {
+variable "image" {
   type        = any
   description = "fluentd container image to deploy"
+}
+variable "instance_name" {
+  type        = any
+  description = "name of instance"
 }

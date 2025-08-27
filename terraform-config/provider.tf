@@ -8,10 +8,6 @@ terraform {
       source  = "hashicorp/google"
       version = ">= 4.34.0"
     }
-    akeyless = {
-      source  = "akeyless-community/akeyless"
-      version = "1.8.2"
-    }
   }
 }
 provider "google" {
