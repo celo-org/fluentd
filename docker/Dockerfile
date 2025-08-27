@@ -39,4 +39,4 @@ USER fluent
 EXPOSE 24224
 
 # Set the entry point and the command.
-CMD ["/bin/bash", "-c", "mkdir -p /fluentd/log/github-audit/pub-sub/message_queue && /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf -n"]
+CMD ["mkdir -p /fluentd/log/github-audit/pub-sub/message_queue && /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf -n"]
