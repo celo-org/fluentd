@@ -29,8 +29,7 @@ COPY downloader.py /fluentd/etc/downloader.py
 
 # Set correct permissions and ownership for all files and directories
 RUN chmod +x /fluentd/etc/downloader.py \
- && chown -R fluent:fluent /fluentd /var/log/fluentd /var/log/supervisor
- && chmod -R 775 /fluentd
+ && chown -R fluent:fluent /fluentd /var/log/fluentd /var/log/supervisor 
 
 # Switch to the fluent user for runtime, as all setup is complete
 USER fluent
