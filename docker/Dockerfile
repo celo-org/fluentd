@@ -28,9 +28,14 @@ COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 COPY fluentd.conf /fluentd/etc/fluentd.conf
 COPY downloader.py /fluentd/etc/downloader.py
 
+# Copy the script and then convert its line endings
+COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+
+
 # Set correct permissions and ownership for all files and directories
-RUN chmod +x /fluentd/etc/downloader.py \
- && chown -R fluent:fluent /fluentd /var/log/fluentd /var/log/supervisor
+RUN chown -R fluent:fluent /fluentd /var/log/fluentd /var/log/supervisor
+ && chmod +x /fluentd/etc/downloader.py \
+ &&  chmod +x /usr/local/bin/docker-entrypoint.sh
 
 # Switch to the fluent user for runtime, as all setup is complete
 USER fluent
