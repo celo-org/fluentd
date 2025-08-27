@@ -35,7 +35,7 @@ COPY docker-entrypoint.sh /fluentd/
 # Set correct permissions and ownership for all files and directories
 RUN chown -R fluent:fluent /fluentd /var/log/fluentd /var/log/supervisor \
  && chmod +x /fluentd/etc/downloader.py \
- &&  chmod +x /usr/local/bin/docker-entrypoint.sh
+ &&  chmod +x /fluentd/docker-entrypoint.sh
 
 # Switch to the fluent user for runtime, as all setup is complete
 USER fluent
